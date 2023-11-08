@@ -392,6 +392,135 @@ async def change_picture(message: types.Message):
         await RekData.main_content.set()
 
 
+@dp.message_handler(state=RekData.main_content, content_types=[
+    'video', 'audio', 'voice', 'photo', 'document', 'text', 'animation', 'video_note', 'venue'])
+async def add_lesson(message: types.Message, state: FSMContext):
+    if message.video:
+        file_id = message.video.file_id
+        file_unique_id = message.video.file_unique_id
+        caption = ''
+        if message.caption is not None:
+            caption += message.caption
+        await message.answer_video(
+            video=file_id,
+            caption=f"{caption}\n\n" \
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
+                    f' (faqat adminlarga ko`rinadi)'
+        )
+        await db.add_lesson(
+            button_name="Asosiy qism",
+            type='video',
+            file_id=file_id,
+            file_unique_id=file_unique_id,
+            description=caption
+        )
+
+        await message.answer("Qo'shildi\n\n"
+                             "Yana ma'lumot kiritishingiz mumkin")
+    elif message.voice:
+        file_id = message.voice.file_id
+        file_unique_id = message.voice.file_unique_id
+        caption = message.caption
+        await message.answer_voice(
+            voice=file_id,
+            caption=f"{caption}\n\n" \
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
+                    f' (faqat adminlarga ko`rinadi)'
+        )
+        await db.add_lesson(
+            button_name="Asosiy qism",
+            type='voice',
+            file_id=file_id,
+            file_unique_id=file_unique_id,
+            description=caption
+        )
+
+        await message.answer("Qo'shildi\n\n"
+                             "Yana ma'lumot kiritishingiz mumkin")
+    elif message.document:
+        file_id = message.document.file_id
+        file_unique_id = message.document.file_unique_id
+        caption = ''
+        if message.caption is not None:
+            caption += message.caption
+        await message.answer_document(
+            document=file_id,
+            caption=f"{caption}\n\n" \
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
+                    f' (faqat adminlarga ko`rinadi)'
+        )
+        await db.add_lesson(
+            button_name="Asosiy qism",
+            type='document',
+            file_id=file_id,
+            file_unique_id=file_unique_id,
+            description=caption
+        )
+
+        await message.answer("Qo'shildi\n\n"
+                             "Yana ma'lumot kiritishingiz mumkin")
+
+    elif message.photo:
+        file_id = message.photo[-1].file_id
+        file_unique_id = message.photo[-1].file_unique_id
+        caption = ''
+        if message.caption is not None:
+            caption += message.caption
+        await message.answer_photo(
+            photo=file_id,
+            caption=f"{caption}\n\n" \
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
+                    f' (faqat adminlarga ko`rinadi)'
+        )
+        await db.add_lesson(
+            button_name="Asosiy qism",
+            type='photo',
+            file_id=file_id,
+            file_unique_id=file_unique_id,
+            description=caption
+        )
+
+        await message.answer("Qo'shildi\n\n"
+                             "Yana ma'lumot kiritishingiz mumkin")
+
+    elif message.audio:
+        file_id = message.audio.file_id
+        file_unique_id = message.audio.file_unique_id
+        caption = ''
+        if message.caption is not None:
+            caption += message.caption
+        await message.answer_audio(
+            audio=file_id,
+            caption=f"{caption}\n\n" \
+                    f'🗑 o`chirish uchun mahsus code - <code>{file_unique_id}</code>'
+                    f' (faqat adminlarga ko`rinadi)'
+        )
+        await db.add_lesson(
+            button_name="Asosiy qism",
+            type='audio',
+            file_id=file_id,
+            file_unique_id=file_unique_id,
+            description=caption
+        )
+
+        await message.answer("Qo'shildi\n\n"
+                             "Yana ma'lumot kiritishingiz mumkin")
+    elif message.text == '🔙️ Orqaga':
+        await message.answer('Admin panel', reply_markup=admin_key)
+        await state.finish()
+    elif message.text:
+        a = await db.add_lesson_text(
+            button_name="Asosiy qism",
+            type='text',
+            file_unique_id=f'{message.message_id}',
+            description=f'{message.text}'
+        )
+        await message.answer(f'{message.text}\n\n' \
+                             f'🗑 o`chirish uchun mahsus code - <code>{message.message_id}</code>'
+                             f' (faqat adminlarga ko`rinadi)')
+        await message.answer("Qo'shildi\n\n"
+                             "Yana ma'lumot kiritishingiz mumkin")
+
 @dp.message_handler(text="Adminni kiriting")
 async def change_picture(message: types.Message):
     admins = await db.select_all_admins()

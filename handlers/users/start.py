@@ -264,7 +264,7 @@ async def del_user(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-@dp.message_handler(text='👤 Huquqshunos bilan aloqa')
+@dp.message_handler(text='👤 Yurist bilan aloqa')
 async def admin_profile(message: types.Message):
     status = True
     all = await db.select_chanel()
@@ -295,14 +295,39 @@ async def admin_profile(message: types.Message):
         for element in elements:
             limit_require += element['limit_require']
             admin += element['gifts']
-        print(user)
-        if user['score'] > limit_require:
+        if user['score'] > limit_require - 1:
             await message.answer(
                 f"👨🏻‍💻 {admin} - murojaat qilish uchun")
         else:
+            url_link = f'https://t.me/huquqshunos_uz_bot?start={message.from_user.id}'
+            lessons = await db.select_related_lessons(button_name="Asosiy qism")
+
+            if lessons:
+                for i in lessons:
+                    if i[2] == 'video':
+                        await message.answer_video(video=f"{i[3]}", caption=f'{i[5]}\n\n{url_link}')
+                    elif i[2] == 'document':
+                        await message.answer_document(
+                            document=f"{i[3]}", caption=f'{i[5]}\n\n{url_link}'
+                        )
+                    elif i[2] == 'audio':
+                        await message.answer_audio(audio=f"{i[3]}", caption=f"{i[5]}\n\n{url_link}")
+                    elif i[2] == 'photo':
+                        await message.answer_photo(photo=f"{i[3]}", caption=f"{i[5]}\n\n{url_link}")
+                    elif i[2] == 'text':
+                        await message.answer(f"{i[5]}\n\n{url_link}")
+            elements = await db.get_elements()
+            limit_require = 0
+            admin = ''
+            for element in elements:
+                limit_require += element['limit_require']
+                admin += element['gifts']
+
             await message.answer(
-                f"Huquqshunos bilan aloqaga chiqish uchun avval {limit_require} bal to'plashingiz kerak ❗️\n\n"
-                f"Sizda {user['score']} ball mavjud")
+                f"<b>Yuqoridagi postni do'stlaringiz bilan ulashing. 👆</b>\n\n"
+                f"<b>{limit_require} ta</b> do'stingiz sizning taklif havolingiz orqali bot'ga kirib kanallarga a'zo bo'lsa, bot avtomatik tarzda sizga bizga bog’lanish uchun imkon beradi. \n\n<b>Sizning murojaatingiz muhim ❗️\n\n"
+                f"Sizda {user['score']} ball mavjud 🏆</b>")
+
     else:
         button = types.InlineKeyboardMarkup(row_width=1, )
         counter = 0

@@ -16,12 +16,10 @@ async def calculate(message: types.Message):
     url = []
     channel_names = []
     score = 0
-    limit_require = 0
     elements = await db.get_elements()
 
     for element in elements:
         score += element['limit_score']
-        limit_require += element['limit_require']
 
     for i in all:
         chanels.append(i['chanelll'])
@@ -35,13 +33,14 @@ async def calculate(message: types.Message):
         button = types.ReplyKeyboardMarkup(
             keyboard=[
                 [
-                    KeyboardButton(text='Ishsiz'),
+                    KeyboardButton(text='Ishlayman'),
+                    KeyboardButton(text='Ishsizman'),
                 ]
             ], resize_keyboard=True
         )
         await message.answer(
             """
-            <b>Alimentni hisoblash ta </b> bizga bazi ma'lumotlarni taqdim qilishingiz kerak bo'ladi\n\nOylik maoshingizni kiriting 👇 (Agar ishsiz bo'lsangin <b>"Ishsiz"</b> - Tugmasini bosing)
+            <b>Alimentni hisoblash </b> uchun bizga bazi ma'lumotlarni taqdim qilishingiz kerak bo'ladi\n\nTugmalardan birni tanlang.)
         """, reply_markup=button)
         await Calculate.salary.set()
     else:
@@ -60,33 +59,41 @@ async def calculate(message: types.Message):
 
 @dp.message_handler(state=Calculate.salary)
 async def salary_(message: types.Message, state: FSMContext):
-    if message.text == 'Ishsiz':
+    if message.text == 'Ishsizman':
         await state.update_data(
             {
                 'salary': 'Ishsiz'
             }
         )
-        await message.answer("Qabul qilindi\n\nFarzandlar sonini kiriting")
+        await message.answer("Qabul qilindi✅\n\nFarzandlar sonini kiriting")
+        await Calculate.calculate.set()
+    elif message.text == "Ishlayman":
+        await message.answer("Oylik maoshingizni kiriting 👇")
         await Calculate.children.set()
     else:
-        try:
-            salary_user = message.text.replace(' ', '')
-
-            await state.update_data(
-                {
-                    'salary': int(salary_user)
-                }
-            )
-            await message.answer("Qabul qilindi ✅\n\nFarzandlar sonini kiriting")
-            await Calculate.children.set()
-        except Exception as err:
-            print(err)
-
-            await message.answer("Kechirasiz faqat son jo'natishingiz mumkin")
-
+        await message.answer("Tugmalardan birini tanlang")
 
 @dp.message_handler(state=Calculate.children)
 async def children_number(message: types.Message, state: FSMContext):
+    try:
+        salary_user = message.text.replace(' ', '')
+
+        await state.update_data(
+            {
+                'salary': int(salary_user)
+            }
+        )
+        await message.answer("Qabul qilindi ✅\n\nFarzandlar sonini kiriting")
+        await Calculate.children.set()
+    except Exception as err:
+        print(err)
+
+        await message.answer("Kechirasiz faqat son jo'natishingiz mumkin")
+    await Calculate.calculate.set()
+
+
+@dp.message_handler(state=Calculate.calculate)
+async def calculatee(message: types.Message, state: FSMContext):
     try:
         children = int(message.text.replace(' ', ''))
         await message.answer("Qabul qilindi ✅")

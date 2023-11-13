@@ -13,6 +13,7 @@ async def on_startup(dispatcher):
     await db.create_table_users()
     await db.create_table_lessons()
     await db.create_table_buttons()
+    await db.drop_elements()
     await db.create_table_chanel_element()
     await set_default_commands(dispatcher)
     await on_startup_notify(dispatcher)

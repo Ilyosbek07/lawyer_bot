@@ -42,26 +42,83 @@ async def env_change(message: types.Message, state: FSMContext):
             await state.finish()
 
 
-@dp.message_handler(text='Oylik miqdori')
+@dp.message_handler(text='Bitta farzand uchun')
 async def add_channel(message: types.Message):
     admins = await db.select_all_admins()
     admins_list = []
     for i in admins:
         admins_list.append(i[1])
     if message.from_user.id in admins_list:
-        await message.answer('Oylikni kiriting', reply_markup=back)
-        await AllState.min_salary.set()
+        await message.answer('Bitta farzand uchun aliment miqdorini kiriting', reply_markup=back)
+        await AllState.one_child.set()
 
 
-@dp.message_handler(state=AllState.min_salary)
+@dp.message_handler(state=AllState.one_child)
 async def env_change(message: types.Message, state: FSMContext):
     if message.text == '🔙️ Orqaga':
         await message.answer('Admin panel', reply_markup=admin_key)
         await state.finish()
     else:
         try:
-            min_salary = int(message.text)
-            await db.update_min_salary(min_salary=min_salary)
+            one_child = float(message.text)
+            await db.add_shartlar(shartlar='test')
+            await db.update_one_child(one_child=one_child)
+
+            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
+            await state.finish()
+        except ValueError:
+            await message.answer('Faqat son qabul qilinadi\n\n'
+                                 'Qaytadan kiriting')
+
+
+@dp.message_handler(text='Ikkita farzand uchun')
+async def add_channel(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer('Ikkita farzand uchun aliment miqdorini kiriting', reply_markup=back)
+        await AllState.two_children.set()
+
+
+@dp.message_handler(state=AllState.two_children)
+async def env_change(message: types.Message, state: FSMContext):
+    if message.text == '🔙️ Orqaga':
+        await message.answer('Admin panel', reply_markup=admin_key)
+        await state.finish()
+    else:
+        try:
+            two_children = float(message.text)
+            await db.update_two_children(two_children=two_children)
+
+            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
+            await state.finish()
+        except ValueError:
+            await message.answer('Faqat son qabul qilinadi\n\n'
+                                 'Qaytadan kiriting')
+
+
+@dp.message_handler(text='Uch va undan ortiq farzand uchun')
+async def add_channel(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer('Uch va undan ortiq farzand uchun aliment miqdorini kiriting', reply_markup=back)
+        await AllState.three_children.set()
+
+
+@dp.message_handler(state=AllState.three_children)
+async def env_change(message: types.Message, state: FSMContext):
+    if message.text == '🔙️ Orqaga':
+        await message.answer('Admin panel', reply_markup=admin_key)
+        await state.finish()
+    else:
+        try:
+            three_children = float(message.text)
+            await db.update_three_children(three_children=three_children)
 
             await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
             await state.finish()
@@ -520,6 +577,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
                              f' (faqat adminlarga ko`rinadi)')
         await message.answer("Qo'shildi\n\n"
                              "Yana ma'lumot kiritishingiz mumkin")
+
 
 @dp.message_handler(text="Adminni kiriting")
 async def change_picture(message: types.Message):

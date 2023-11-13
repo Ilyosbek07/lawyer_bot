@@ -62,20 +62,21 @@ admin_key = ReplyKeyboardMarkup(
         ],
         [
             KeyboardButton(text='Referall Content'),
-            KeyboardButton(text="Oylik miqdori")
+            KeyboardButton(text="Adminni kiriting"),
+
         ],
         [
             KeyboardButton(text='Taklif miqdorini kiritish'),
             KeyboardButton(text='Taklif chegarasini kiritish'),
-        #     KeyboardButton(text="G'oliblarga")
-        ],
-        [
             KeyboardButton(text="Adminni kiriting"),
-        #     KeyboardButton(text="Remove File"),
-            KeyboardButton(text="Barcha ma'lumotlarni tozalash")
         ],
         [
-        #     KeyboardButton(text='Hisobni 0 ga tushirish'),
+            KeyboardButton(text="Barcha ma'lumotlarni tozalash"),
+            KeyboardButton(text="Bitta farzand uchun"),
+            KeyboardButton(text="Ikkita farzand uchun")
+        ],
+        [
+            KeyboardButton(text='Uch va undan ortiq farzand uchun'),
             KeyboardButton(text="🏘 Bosh menu")
 
         ]

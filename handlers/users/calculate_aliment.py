@@ -73,6 +73,7 @@ async def salary_(message: types.Message, state: FSMContext):
     else:
         await message.answer("Tugmalardan birini tanlang")
 
+
 @dp.message_handler(state=Calculate.children)
 async def children_number(message: types.Message, state: FSMContext):
     try:
@@ -100,45 +101,46 @@ async def calculatee(message: types.Message, state: FSMContext):
         data = await state.get_data()
         salary = data.get('salary')
         if salary == "Ishsiz":
-            min_salary = await db.get_elements()
-            print(min_salary)
+            db_data = await db.get_elements()
             if children == 1:
-                aliment = int(min_salary[0]['min_salary'] / 4)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                await message.answer(f"Siz {children} ta farzand uchun {db_data[0]['one_child']} so'm to'lashingiz kerak",
+                                     reply_markup=menu)
                 await state.finish()
 
             elif children == 2:
-                aliment = int(min_salary[0]['min_salary'] / 3)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                await message.answer(f"Siz {children} ta farzand uchun {db_data[0]['two_children']} so'm to'lashingiz kerak",
+                                     reply_markup=menu)
                 await state.finish()
 
             elif children >= 3:
-                aliment = int(min_salary[0]['min_salary'] / 2)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                await message.answer(
+                    f"Siz {children} ta farzand uchun {db_data[0]['three_children']} so'm to'lashingiz kerak",
+                    reply_markup=menu)
                 await state.finish()
             else:
-                aliment = int(min_salary[0]['min_salary'] / 2)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                await message.answer(
+                    f"Siz {children} ta farzand uchun {db_data[0]['three_children']} so'm to'lashingiz kerak",
+                    reply_markup=menu)
                 await state.finish()
 
         elif salary != "Ishsiz":
             if children == 1:
-                aliment = int(salary / 4)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                aliment = float(salary / 4)
+                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
                 await state.finish()
 
             elif children == 2:
-                aliment = int(salary / 3)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                aliment = float(salary / 3)
+                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
                 await state.finish()
 
             elif children == 3:
-                aliment = int(salary / 2)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                aliment = float(salary / 2)
+                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
                 await state.finish()
             else:
-                aliment = int(salary / 2)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} to'lashingiz kerak", reply_markup=menu)
+                aliment = float(salary / 2)
+                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
                 await state.finish()
 
     except Exception as err:

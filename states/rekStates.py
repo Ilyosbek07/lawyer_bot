@@ -4,7 +4,11 @@ from aiogram.dispatcher.filters.state import StatesGroup, State
 class AllState(StatesGroup):
     env = State()
     env_remove = State()
-    min_salary = State()
+    one_child = State()
+    two_children = State()
+    three_children = State()
+
+
 class DelState(StatesGroup):
     del_user = State()
 

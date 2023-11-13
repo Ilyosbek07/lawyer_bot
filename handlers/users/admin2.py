@@ -60,7 +60,7 @@ async def env_change(message: types.Message, state: FSMContext):
         await state.finish()
     else:
         try:
-            one_child = float(message.text)
+            one_child = float(message.text.replace(' ', ''))
             await db.add_shartlar(shartlar='test')
             await db.update_one_child(one_child=one_child)
 
@@ -89,7 +89,7 @@ async def env_change(message: types.Message, state: FSMContext):
         await state.finish()
     else:
         try:
-            two_children = float(message.text)
+            two_children = float(message.text.replace(' ', ''))
             await db.update_two_children(two_children=two_children)
 
             await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
@@ -117,7 +117,7 @@ async def env_change(message: types.Message, state: FSMContext):
         await state.finish()
     else:
         try:
-            three_children = float(message.text)
+            three_children = float(message.text.replace(' ', ''))
             await db.update_three_children(three_children=three_children)
 
             await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)

@@ -297,7 +297,7 @@ async def admin_profile(message: types.Message):
             admin += element['gifts']
         if user['score'] > limit_require - 1:
             await message.answer(
-                f"👨🏻‍💻 {admin} - murojaat qilish uchun")
+                f"{admin}")
         else:
             url_link = f'https://t.me/huquqshunos_uz_bot?start={message.from_user.id}'
             lessons = await db.select_related_lessons(button_name="Asosiy qism")

@@ -62,13 +62,29 @@ async def salary_(message: types.Message, state: FSMContext):
     if message.text == 'Ishsizman':
         await state.update_data(
             {
-                'salary': 'Ishsiz'
+                'salary': 'Ishsizman'
             }
         )
-        await message.answer("Qabul qilindi✅\n\nFarzandlar sonini kiriting")
+        button = types.ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text="Bitta farzand uchun"),
+                    KeyboardButton(text="Ikkita farzand uchun")
+                ],
+                [
+                    KeyboardButton(text='Uch va undan ortiq farzand uchun'),
+                ],
+                [
+                    KeyboardButton(text='🔙 Orqaga qaytish')
+                ]
+            ],
+            resize_keyboard=True
+        )
+        await message.answer("Qabul qilindi✅\n\nFarzandlar sonini kiriting", reply_markup=button)
         await Calculate.calculate.set()
     elif message.text == "Ishlayman":
-        await message.answer("Oylik maoshingizni kiriting 👇")
+        await message.answer("Oylik maoshingizni kiriting 👇\n"
+                             "<b>(Masalan: 3 000 000)</b>", reply_markup=types.ReplyKeyboardRemove())
         await Calculate.children.set()
     else:
         await message.answer("Tugmalardan birini tanlang")
@@ -84,7 +100,23 @@ async def children_number(message: types.Message, state: FSMContext):
                 'salary': int(salary_user)
             }
         )
-        await message.answer("Qabul qilindi ✅\n\nFarzandlar sonini kiriting")
+        button = types.ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text="Bitta farzand uchun"),
+                    KeyboardButton(text="Ikkita farzand uchun")
+                ],
+                [
+                    KeyboardButton(text='Uch va undan ortiq farzand uchun'),
+                ],
+                [
+                    KeyboardButton(text='🔙 Orqaga qaytish')
+                ]
+            ],
+            resize_keyboard=True
+        )
+
+        await message.answer("Qabul qilindi ✅\n\nFarzandlar sonini kiriting", reply_markup=button)
         await Calculate.children.set()
     except Exception as err:
         print(err)
@@ -95,54 +127,127 @@ async def children_number(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=Calculate.calculate)
 async def calculatee(message: types.Message, state: FSMContext):
-    try:
-        children = int(message.text.replace(' ', ''))
-        await message.answer("Qabul qilindi ✅")
-        data = await state.get_data()
-        salary = data.get('salary')
-        if salary == "Ishsiz":
-            db_data = await db.get_elements()
-            if children == 1:
-                await message.answer(f"Siz {children} ta farzand uchun {db_data[0]['one_child']} so'm to'lashingiz kerak",
-                                     reply_markup=menu)
-                await state.finish()
+    data = await state.get_data()
+    salary = data.get('salary')
 
-            elif children == 2:
-                await message.answer(f"Siz {children} ta farzand uchun {db_data[0]['two_children']} so'm to'lashingiz kerak",
-                                     reply_markup=menu)
-                await state.finish()
+    if message.text == "🔙 Orqaga" and salary == "Ishsizman":
+        button = types.ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text="Bitta farzand uchun"),
+                    KeyboardButton(text="Ikkita farzand uchun")
+                ],
+                [
+                    KeyboardButton(text='Uch va undan ortiq farzand uchun'),
+                ],
+                [
+                    KeyboardButton(text='🔙 Orqaga qaytish')
+                ]
+            ],
+            resize_keyboard=True
+        )
+        await message.answer("Farzandlar sonini kiriting", reply_markup=button)
+        # await Calculate.calculate.set()
+    elif message.text == "🔙 Orqaga" and salary != "Ishsizman":
+        button = types.ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text="Bitta farzand uchun"),
+                    KeyboardButton(text="Ikkita farzand uchun")
+                ],
+                [
+                    KeyboardButton(text='Uch va undan ortiq farzand uchun'),
+                ],
+                [
+                    KeyboardButton(text='🔙 Orqaga qaytish')
+                ]
+            ],
+            resize_keyboard=True
+        )
+        await message.answer("Farzandlar sonini kiriting", reply_markup=button)
+    elif message.text == "🔙 Orqaga qaytish":
+        choice = types.ReplyKeyboardMarkup(
+            keyboard=[
+                [
+                    KeyboardButton(text='Ishlayman'),
+                    KeyboardButton(text='Ishsizman'),
+                ]
+            ], resize_keyboard=True
+        )
+        await message.answer("""
+            <b>Alimentni hisoblash </b> uchun bizga bazi ma'lumotlarni taqdim qilishingiz kerak bo'ladi\n\nTugmalardan birni tanlang.)
+        """, reply_markup=choice)
+        await state.reset_data()
+        await Calculate.salary.set()
+    elif message.text == "🔝 Bosh Menu":
+        await message.answer("Bosh menu", reply_markup=menu)
+        await state.finish()
+    else:
+        try:
+            children = message.text
+            await message.answer("Qabul qilindi ✅")
+            button = types.ReplyKeyboardMarkup(
+                keyboard=[
+                    [
+                        KeyboardButton(text="🔙 Orqaga"),
+                        KeyboardButton(text="🔝 Bosh Menu")
+                    ]], resize_keyboard=True
+            )
+            if salary == "Ishsizman":
+                db_data = await db.get_elements()
+                if children == "Bitta farzand uchun":
+                    await message.answer(
+                        f"Siz {children} ta farzand uchun {db_data[0]['one_child']} so'm to'lashingiz kerak",
+                        reply_markup=button)
 
-            elif children >= 3:
-                await message.answer(
-                    f"Siz {children} ta farzand uchun {db_data[0]['three_children']} so'm to'lashingiz kerak",
-                    reply_markup=menu)
-                await state.finish()
-            else:
-                await message.answer(
-                    f"Siz {children} ta farzand uchun {db_data[0]['three_children']} so'm to'lashingiz kerak",
-                    reply_markup=menu)
-                await state.finish()
+                elif children == "Ikkita farzand uchun":
+                    await message.answer(
+                        f"Siz {children} ta farzand uchun {db_data[0]['two_children']} so'm to'lashingiz kerak",
+                        reply_markup=button)
 
-        elif salary != "Ishsiz":
-            if children == 1:
-                aliment = float(salary / 4)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
-                await state.finish()
+                elif children == "Uch va undan ortiq farzand uchun":
+                    await message.answer(
+                        f"Siz {children} ta farzand uchun {db_data[0]['three_children']} so'm to'lashingiz kerak",
+                        reply_markup=button)
 
-            elif children == 2:
-                aliment = float(salary / 3)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
-                await state.finish()
+            elif salary != "Ishsizman":
+                if children == "Bitta farzand uchun":
+                    aliment = float(salary / 4)
+                    await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak",
+                                         reply_markup=button)
 
-            elif children == 3:
-                aliment = float(salary / 2)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
-                await state.finish()
-            else:
-                aliment = float(salary / 2)
-                await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak", reply_markup=menu)
-                await state.finish()
+                elif children == "Ikkita farzand uchun":
+                    aliment = float(salary / 3)
+                    await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak",
+                                         reply_markup=button)
 
-    except Exception as err:
-        print(err)
-        await message.answer("Kechirasiz faqat son jo'natishingiz mumkin!!!!")
+                elif children == "Uch va undan ortiq farzand uchun":
+                    aliment = float(salary / 2)
+                    await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak",
+                                         reply_markup=button)
+
+        except Exception as err:
+            print(err)
+            await message.answer("Kechirasiz faqat son jo'natishingiz mumkin!!!!")
+
+
+@dp.message_handler(state=Calculate.ishsiz)
+async def calculatee(message: types.Message, state: FSMContext):
+    print('keldi')
+    button = types.ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="Bitta farzand uchun"),
+                KeyboardButton(text="Ikkita farzand uchun")
+            ],
+            [
+                KeyboardButton(text='Uch va undan ortiq farzand uchun'),
+            ],
+            [
+                KeyboardButton(text='🔙 Orqaga qaytish')
+            ]
+        ],
+        resize_keyboard=True
+    )
+    await message.answer("Qabul qilindi✅\n\nFarzandlar sonini kiriting", reply_markup=button)
+    await Calculate.calculate.set()

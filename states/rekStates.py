@@ -17,6 +17,8 @@ class Calculate(StatesGroup):
     salary = State()
     children = State()
     calculate = State()
+    ishsiz = State()
+    ishli = State()
 
 
 class RekData(StatesGroup):

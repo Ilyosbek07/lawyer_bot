@@ -68,7 +68,6 @@ admin_key = ReplyKeyboardMarkup(
         [
             KeyboardButton(text='Taklif miqdorini kiritish'),
             KeyboardButton(text='Taklif chegarasini kiritish'),
-            KeyboardButton(text="Adminni kiriting"),
         ],
         [
             KeyboardButton(text="Barcha ma'lumotlarni tozalash"),

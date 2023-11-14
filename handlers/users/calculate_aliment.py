@@ -217,22 +217,22 @@ async def calculatee(message: types.Message, state: FSMContext):
             elif salary != "Ishsizman":
                 if children == "Bitta farzand uchun":
                     aliment = float(salary / 4)
-                    await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak",
+                    await message.answer(f"Siz Bitta farzand uchun {aliment} so'm to'lashingiz kerak",
                                          reply_markup=button)
 
                 elif children == "Ikkita farzand uchun":
                     aliment = float(salary / 3)
-                    await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak",
+                    await message.answer(f"Siz Ikkita farzand uchun farzand uchun {aliment} so'm to'lashingiz kerak",
                                          reply_markup=button)
 
                 elif children == "Uch va undan ortiq farzand uchun":
                     aliment = float(salary / 2)
-                    await message.answer(f"Siz {children} ta farzand uchun {aliment} so'm to'lashingiz kerak",
+                    await message.answer(f"Siz Uch va undan ortiq farzand uchun {aliment} so'm to'lashingiz kerak",
                                          reply_markup=button)
 
         except Exception as err:
             print(err)
-            await message.answer("Kechirasiz faqat son jo'natishingiz mumkin!!!!")
+            await message.answer("Kechirasiz faqat son jo'natishingiz mumkin!")
 
 
 @dp.message_handler(state=Calculate.ishsiz)

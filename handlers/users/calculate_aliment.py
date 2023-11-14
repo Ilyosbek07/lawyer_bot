@@ -222,7 +222,7 @@ async def calculatee(message: types.Message, state: FSMContext):
 
                 elif children == "Ikkita farzand uchun":
                     aliment = float(salary / 3)
-                    await message.answer(f"Siz Ikkita farzand uchun farzand uchun {aliment} so'm to'lashingiz kerak",
+                    await message.answer(f"Siz Ikkita farzand uchun {aliment} so'm to'lashingiz kerak",
                                          reply_markup=button)
 
                 elif children == "Uch va undan ortiq farzand uchun":

@@ -61,23 +61,35 @@ admin_key = ReplyKeyboardMarkup(
             KeyboardButton(text="Statistika 📊")
         ],
         [
-            KeyboardButton(text='Referall Content'),
-            KeyboardButton(text="Adminni kiriting"),
-
-        ],
-        [
             KeyboardButton(text='Taklif miqdorini kiritish'),
             KeyboardButton(text='Taklif chegarasini kiritish'),
         ],
         [
-            KeyboardButton(text="Barcha ma'lumotlarni tozalash"),
+            KeyboardButton(text="🏘 Bosh menu")
+        ]
+    ],
+    resize_keyboard=True
+)
+admin_key2 = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text='Referall Content'),
+            KeyboardButton(text="Referall Content tozalash"),
+            KeyboardButton(text="Admin haqida ma'lumot"),
+        ],
+        [
+            KeyboardButton(text='1-miqdor'),
+            KeyboardButton(text='2-miqdor'),
+            KeyboardButton(text='3-miqdor'),
+        ],
+        [
+            KeyboardButton(text='Eng kam oylik'),
             KeyboardButton(text="Bitta farzand uchun"),
             KeyboardButton(text="Ikkita farzand uchun")
         ],
         [
             KeyboardButton(text='Uch va undan ortiq farzand uchun'),
             KeyboardButton(text="🏘 Bosh menu")
-
         ]
     ],
     resize_keyboard=True

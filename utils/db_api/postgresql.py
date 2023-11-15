@@ -82,10 +82,13 @@ class Database:
         gifts TEXT NULL,
         game_text TEXT NULL,
         shartlar TEXT NULL,
-        limit_score INT DEFAULT 1,
+        min_salary INT DEFAULT 1,
         one_child INT DEFAULT 1,
         two_children INT DEFAULT 1,
         three_children INT DEFAULT 1,
+        first_min INT DEFAULT 1,
+        second_min INT DEFAULT 1,
+        three_min INT DEFAULT 1,
         limit_require INT DEFAULT 5,
         winners INT DEFAULT 20,
         bot_url varchar(255)
@@ -261,6 +264,22 @@ class Database:
     async def update_limit_score(self, limit_score):
         sql = "UPDATE Elementt SET limit_score=$1 WHERE id=1"
         return await self.execute(sql, limit_score, execute=True)
+
+    async def update_min_salary(self, min_salary):
+        sql = "UPDATE Elementt SET min_salary=$1 WHERE id=1"
+        return await self.execute(sql, min_salary, execute=True)
+
+    async def update_first_min(self, first_min):
+        sql = "UPDATE Elementt SET first_min=$1 WHERE id=1"
+        return await self.execute(sql, first_min, execute=True)
+
+    async def update_second_min(self, second_min):
+        sql = "UPDATE Elementt SET second_min=$1 WHERE id=1"
+        return await self.execute(sql, second_min, execute=True)
+
+    async def update_three_min(self, three_min):
+        sql = "UPDATE Elementt SET three_min=$1 WHERE id=1"
+        return await self.execute(sql, three_min, execute=True)
 
     async def update_one_child(self, one_child):
         sql = "UPDATE Elementt SET one_child=$1 WHERE id=1"

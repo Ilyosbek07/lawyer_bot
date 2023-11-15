@@ -26,7 +26,6 @@ async def show_channels(message: types.Message, state: FSMContext):
     for element in elements:
         photo += f"{element['photo']}"
         gifts += f"{element['gifts']}"
-        score += element['limit_score']
         limit_require += element['limit_require']
 
     if args and not if_old:

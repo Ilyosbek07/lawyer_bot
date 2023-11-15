@@ -15,11 +15,6 @@ async def calculate(message: types.Message):
     chanels = []
     url = []
     channel_names = []
-    score = 0
-    elements = await db.get_elements()
-
-    for element in elements:
-        score += element['limit_score']
 
     for i in all:
         chanels.append(i['chanelll'])
@@ -35,6 +30,9 @@ async def calculate(message: types.Message):
                 [
                     KeyboardButton(text='Ishlayman'),
                     KeyboardButton(text='Ishsizman'),
+                ],
+                [
+                    KeyboardButton(text="🔝 Bosh menu")
                 ]
             ], resize_keyboard=True
         )
@@ -188,6 +186,7 @@ async def calculatee(message: types.Message, state: FSMContext):
         await state.finish()
     else:
         try:
+            db_data = await db.get_elements()
             children = message.text
             await message.answer("Qabul qilindi ✅")
             button = types.ReplyKeyboardMarkup(
@@ -198,7 +197,6 @@ async def calculatee(message: types.Message, state: FSMContext):
                     ]], resize_keyboard=True
             )
             if salary == "Ishsizman":
-                db_data = await db.get_elements()
                 if children == "Bitta farzand uchun":
                     await message.answer(
                         f"Siz Bitta ta farzand uchun {db_data[0]['one_child']} so'm to'lashingiz kerak",
@@ -215,20 +213,37 @@ async def calculatee(message: types.Message, state: FSMContext):
                         reply_markup=button)
 
             elif salary != "Ishsizman":
-                if children == "Bitta farzand uchun":
-                    aliment = float(salary / 4)
-                    await message.answer(f"Siz Bitta farzand uchun {aliment} so'm to'lashingiz kerak",
-                                         reply_markup=button)
+                if salary <= int(db_data[0]['min_salary']):
+                    if children == "Bitta farzand uchun":
+                        await message.answer(
+                            f"Siz Bitta farzand uchun {db_data[0]['first_min']} so'm to'lashingiz kerak",
+                            reply_markup=button)
 
-                elif children == "Ikkita farzand uchun":
-                    aliment = float(salary / 3)
-                    await message.answer(f"Siz Ikkita farzand uchun {aliment} so'm to'lashingiz kerak",
-                                         reply_markup=button)
+                    elif children == "Ikkita farzand uchun":
+                        await message.answer(
+                            f"Siz Ikkita farzand uchun {db_data[0]['second_min']} so'm to'lashingiz kerak",
+                            reply_markup=button)
 
-                elif children == "Uch va undan ortiq farzand uchun":
-                    aliment = float(salary / 2)
-                    await message.answer(f"Siz Uch va undan ortiq farzand uchun {aliment} so'm to'lashingiz kerak",
-                                         reply_markup=button)
+                    elif children == "Uch va undan ortiq farzand uchun":
+                        await message.answer(
+                            f"Siz Uch va undan ortiq farzand uchun {db_data[0]['three_min']} so'm to'lashingiz kerak",
+                            reply_markup=button)
+
+                else:
+                    if children == "Bitta farzand uchun":
+                        aliment = float(salary / 4)
+                        await message.answer(f"Siz Bitta farzand uchun {aliment} so'm to'lashingiz kerak",
+                                             reply_markup=button)
+
+                    elif children == "Ikkita farzand uchun":
+                        aliment = float(salary / 3)
+                        await message.answer(f"Siz Ikkita farzand uchun {aliment} so'm to'lashingiz kerak",
+                                             reply_markup=button)
+
+                    elif children == "Uch va undan ortiq farzand uchun":
+                        aliment = float(salary / 2)
+                        await message.answer(f"Siz Uch va undan ortiq farzand uchun {aliment} so'm to'lashingiz kerak",
+                                             reply_markup=button)
 
         except Exception as err:
             print(err)

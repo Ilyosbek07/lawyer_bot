@@ -40,6 +40,10 @@ class RekData(StatesGroup):
     delete = State()
     kbsh = State()
     winners = State()
+    first_min = State()
+    second_min = State()
+    three_min = State()
+    min_salary = State()
 
 
 class Number(StatesGroup):

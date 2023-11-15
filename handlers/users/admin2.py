@@ -2,7 +2,9 @@ import asyncio
 from datetime import datetime, timedelta
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from keyboards.default.rekKeyboards import back, admin_key
+
+from keyboards.default.all import menu
+from keyboards.default.rekKeyboards import back, admin_key, admin_key2
 from loader import dp, db, bot
 from states.rekStates import RekData, AllState, Lesson, Number
 
@@ -56,8 +58,9 @@ async def add_channel(message: types.Message):
 @dp.message_handler(state=AllState.one_child)
 async def env_change(message: types.Message, state: FSMContext):
     if message.text == '🔙️ Orqaga':
-        await message.answer('Admin panel', reply_markup=admin_key)
+        await message.answer('Admin panel', reply_markup=admin_key2)
         await state.finish()
+
     else:
         try:
             one_child = float(message.text.replace(' ', ''))
@@ -85,7 +88,7 @@ async def add_channel(message: types.Message):
 @dp.message_handler(state=AllState.two_children)
 async def env_change(message: types.Message, state: FSMContext):
     if message.text == '🔙️ Orqaga':
-        await message.answer('Admin panel', reply_markup=admin_key)
+        await message.answer('Admin panel', reply_markup=admin_key2)
         await state.finish()
     else:
         try:
@@ -113,7 +116,7 @@ async def add_channel(message: types.Message):
 @dp.message_handler(state=AllState.three_children)
 async def env_change(message: types.Message, state: FSMContext):
     if message.text == '🔙️ Orqaga':
-        await message.answer('Admin panel', reply_markup=admin_key)
+        await message.answer('Admin panel', reply_markup=admin_key2)
         await state.finish()
     else:
         try:
@@ -186,6 +189,17 @@ async def admin(message: types.Message):
     if message.from_user.id in admins_list:
         await message.answer(text='Admin panel',
                              reply_markup=admin_key)
+
+
+@dp.message_handler(commands=['admin2'])
+async def admin(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer(text='Admin panel',
+                             reply_markup=admin_key2)
 
 
 @dp.message_handler(text='Kanal ➕')
@@ -349,7 +363,7 @@ async def show_users(message: types.Message):
 
 @dp.message_handler(text='🏘 Bosh menu')
 async def menuu(message: types.Message):
-    await message.answer('Bosh menu')
+    await message.answer('Bosh menu', reply_markup=menu)
 
 
 @dp.message_handler(text='Kanallar 📈')
@@ -563,7 +577,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
         await message.answer("Qo'shildi\n\n"
                              "Yana ma'lumot kiritishingiz mumkin")
     elif message.text == '🔙️ Orqaga':
-        await message.answer('Admin panel', reply_markup=admin_key)
+        await message.answer('Admin panel', reply_markup=admin_key2)
         await state.finish()
     elif message.text:
         a = await db.add_lesson_text(
@@ -579,7 +593,7 @@ async def add_lesson(message: types.Message, state: FSMContext):
                              "Yana ma'lumot kiritishingiz mumkin")
 
 
-@dp.message_handler(text="Adminni kiriting")
+@dp.message_handler(text="Admin haqida ma'lumot")
 async def change_picture(message: types.Message):
     admins = await db.select_all_admins()
     admins_list = []
@@ -596,7 +610,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
         elements = await db.get_elements()
         if elements:
             await db.update_gift(gift=message.text)
-            await message.answer('Yangilandi', reply_markup=admin_key)
+            await message.answer('Yangilandi', reply_markup=admin_key2)
             await state.finish()
         elif message.text == '/start':
             await message.answer('Bosh menu')
@@ -604,7 +618,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
 
         else:
             await db.add_gift(gift=message.text)
-            await message.answer('Qo`shildi', reply_markup=admin_key)
+            await message.answer('Qo`shildi', reply_markup=admin_key2)
             await state.finish()
 
     elif message.text == '🔙️ Orqaga':
@@ -675,8 +689,6 @@ async def limit(message: types.Message, state: FSMContext):
                 await db.update_limit_require(limit_require=text)
                 await message.answer('Yangilandi', reply_markup=admin_key)
                 await state.finish()
-            # else:
-            # await db.add_text()
         elif message.text == '/start':
             await message.answer('Bosh menu')
             await state.finish()
@@ -718,33 +730,11 @@ async def change_picture_(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-@dp.message_handler(text='link 1')
-async def show_channels(message: types.Message, state: FSMContext):
-    expire_date = datetime.now() + timedelta(minutes=1)
-    invitee_link = await bot.create_chat_invite_link(chat_id=-1001924263164, member_limit=1,
-                                                     expire_date=expire_date)
-    await bot.send_message(chat_id=message.from_user.id, text=invitee_link.invite_link, protect_content=True)
-
-
-@dp.message_handler(text='link berish')
-async def show_channels(message: types.Message, state: FSMContext):
-    await message.answer('boshlandi')
-    if_getter_link_user = await db.select_all_users()
-    for i in if_getter_link_user:
-        try:
-            if int(i[4]) > 1:
-                await bot.send_message(chat_id=i[6], text='https://t.me/+XciKZBFCH2k3OTE6', protect_content=True)
-                await asyncio.sleep(0.05)
-        except Exception as err:
-            print(err)
-    await message.answer('tugadi')
-
-
-@dp.message_handler(text="Barcha ma'lumotlarni tozalash")
+@dp.message_handler(text="Referall Content tozalash")
 async def drop_lessons_db(message: types.Message):
     await db.drop_lessons()
     await db.create_table_lessons()
-    await message.answer("Tozalandi")
+    await message.answer("Tozalandi", reply_markup=admin_key2)
 
 
 @dp.message_handler(text='Remove File')
@@ -779,3 +769,136 @@ async def del_button(message: types.Message, state: FSMContext):
             await message.answer('Bunday ma`lumot topilmadi')
     else:
         await message.answer('Xato\n\nBunday id yo`q\n\nChiqish uchun orqaga tugmasini bosing')
+
+
+@dp.message_handler(text="1-miqdor")
+async def change_picture(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer('Yuboring', reply_markup=back)
+        await RekData.first_min.set()
+
+
+@dp.message_handler(state=RekData.first_min)
+async def change_picture_(message: types.Message, state: FSMContext):
+    if message.text:
+        if message.text == '/start':
+            await message.answer('Bosh menu')
+            await state.finish()
+        elif message.text == '🔙️ Orqaga':
+            await message.answer('Admin panel 2', reply_markup=admin_key2)
+            await state.finish()
+
+        else:
+            await db.update_first_min(first_min=int(message.text))
+            await message.answer('Qo`shildi', reply_markup=admin_key2)
+            await state.finish()
+
+    elif message.text == '🔙️ Orqaga':
+        await message.answer('Bosh menu')
+        await state.finish()
+    else:
+        await message.answer('Faqat Son qabul qilamiz')
+
+
+@dp.message_handler(text="3-miqdor")
+async def change_picture(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer('Yuboring', reply_markup=back)
+        await RekData.three_min.set()
+
+
+@dp.message_handler(state=RekData.three_min)
+async def change_picture_(message: types.Message, state: FSMContext):
+    if message.text:
+        if message.text == '/start':
+            await message.answer('Bosh menu')
+            await state.finish()
+        elif message.text == '🔙️ Orqaga':
+            await message.answer('Admin panel 2', reply_markup=admin_key2)
+            await state.finish()
+
+        else:
+            await db.update_three_min(three_min=int(message.text))
+            await message.answer('Qo`shildi', reply_markup=admin_key2)
+            await state.finish()
+
+    elif message.text == '🔙️ Orqaga':
+        await message.answer('Bosh menu')
+        await state.finish()
+    else:
+        await message.answer('Faqat Son qabul qilamiz')
+
+
+@dp.message_handler(text="2-miqdor")
+async def change_picture(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer('Yuboring', reply_markup=back)
+        await RekData.second_min.set()
+
+
+@dp.message_handler(state=RekData.second_min)
+async def change_picture_(message: types.Message, state: FSMContext):
+    if message.text:
+        if message.text == '/start':
+            await message.answer('Bosh menu')
+            await state.finish()
+        elif message.text == '🔙️ Orqaga':
+            await message.answer('Admin panel 2', reply_markup=admin_key2)
+            await state.finish()
+
+        else:
+            await db.update_second_min(second_min=int(message.text))
+            await message.answer('Qo`shildi', reply_markup=admin_key2)
+            await state.finish()
+
+    elif message.text == '🔙️ Orqaga':
+        await message.answer('Bosh menu')
+        await state.finish()
+    else:
+        await message.answer('Faqat Son qabul qilamiz')
+
+
+@dp.message_handler(text="Eng kam oylik")
+async def change_picture(message: types.Message):
+    admins = await db.select_all_admins()
+    admins_list = []
+    for i in admins:
+        admins_list.append(i[1])
+    if message.from_user.id in admins_list:
+        await message.answer('Yuboring', reply_markup=back)
+        await RekData.min_salary.set()
+
+
+@dp.message_handler(state=RekData.min_salary)
+async def change_min_salary(message: types.Message, state: FSMContext):
+    if message.text:
+        elements = await db.get_elements()
+        if message.text == '/start':
+            await message.answer('Bosh menu')
+            await state.finish()
+        elif message.text == '🔙️ Orqaga':
+            await message.answer('Admin panel 2', reply_markup=admin_key2)
+            await state.finish()
+
+        else:
+            await db.update_min_salary(min_salary=int(message.text))
+            await message.answer('Qo`shildi', reply_markup=admin_key2)
+            await state.finish()
+
+    elif message.text == '🔙️ Orqaga':
+        await message.answer('Bosh menu')
+        await state.finish()
+    else:
+        await message.answer('Faqat Son qabul qilamiz')

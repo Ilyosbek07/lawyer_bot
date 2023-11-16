@@ -67,7 +67,7 @@ async def env_change(message: types.Message, state: FSMContext):
             await db.add_shartlar(shartlar='test')
             await db.update_one_child(one_child=one_child)
 
-            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
+            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key2)
             await state.finish()
         except ValueError:
             await message.answer('Faqat son qabul qilinadi\n\n'
@@ -95,7 +95,7 @@ async def env_change(message: types.Message, state: FSMContext):
             two_children = float(message.text.replace(' ', ''))
             await db.update_two_children(two_children=two_children)
 
-            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
+            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key2)
             await state.finish()
         except ValueError:
             await message.answer('Faqat son qabul qilinadi\n\n'
@@ -123,7 +123,7 @@ async def env_change(message: types.Message, state: FSMContext):
             three_children = float(message.text.replace(' ', ''))
             await db.update_three_children(three_children=three_children)
 
-            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key)
+            await message.answer(f"Qo'shildi\n\n", reply_markup=admin_key2)
             await state.finish()
         except ValueError:
             await message.answer('Faqat son qabul qilinadi\n\n'
@@ -786,20 +786,16 @@ async def change_picture(message: types.Message):
 async def change_picture_(message: types.Message, state: FSMContext):
     if message.text:
         if message.text == '/start':
-            await message.answer('Bosh menu')
+            await message.answer('Bosh menu', reply_markup=menu)
             await state.finish()
         elif message.text == '🔙️ Orqaga':
             await message.answer('Admin panel 2', reply_markup=admin_key2)
             await state.finish()
 
         else:
-            await db.update_first_min(first_min=int(message.text))
+            await db.update_first_min(first_min=int(message.text.replace(' ', '')))
             await message.answer('Qo`shildi', reply_markup=admin_key2)
             await state.finish()
-
-    elif message.text == '🔙️ Orqaga':
-        await message.answer('Bosh menu')
-        await state.finish()
     else:
         await message.answer('Faqat Son qabul qilamiz')
 
@@ -826,7 +822,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
             await state.finish()
 
         else:
-            await db.update_three_min(three_min=int(message.text))
+            await db.update_three_min(three_min=int(message.text.replace(' ', '')))
             await message.answer('Qo`shildi', reply_markup=admin_key2)
             await state.finish()
 
@@ -859,7 +855,7 @@ async def change_picture_(message: types.Message, state: FSMContext):
             await state.finish()
 
         else:
-            await db.update_second_min(second_min=int(message.text))
+            await db.update_second_min(second_min=int(message.text.replace(' ', '')))
             await message.answer('Qo`shildi', reply_markup=admin_key2)
             await state.finish()
 
@@ -884,7 +880,6 @@ async def change_picture(message: types.Message):
 @dp.message_handler(state=RekData.min_salary)
 async def change_min_salary(message: types.Message, state: FSMContext):
     if message.text:
-        elements = await db.get_elements()
         if message.text == '/start':
             await message.answer('Bosh menu')
             await state.finish()
@@ -893,7 +888,7 @@ async def change_min_salary(message: types.Message, state: FSMContext):
             await state.finish()
 
         else:
-            await db.update_min_salary(min_salary=int(message.text))
+            await db.update_min_salary(min_salary=int(message.text.replace(' ', '')))
             await message.answer('Qo`shildi', reply_markup=admin_key2)
             await state.finish()
 

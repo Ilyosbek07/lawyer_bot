@@ -270,14 +270,6 @@ async def admin_profile(message: types.Message):
     chanels = []
     url = []
     channel_names = []
-    score = 0
-    limit_require = 0
-    elements = await db.get_elements()
-
-    for element in elements:
-        score += element['limit_score']
-        limit_require += element['limit_require']
-
     for i in all:
         chanels.append(i['chanelll'])
         url.append(i['url'])

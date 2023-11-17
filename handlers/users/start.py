@@ -55,11 +55,8 @@ async def show_channels(message: types.Message, state: FSMContext):
             text = """
             Assalom aleykum, bu bot sizga Amerikada istiqomat qilib, yuridik faoliyat olib boruvchi malakali yuristlar jamoasidan bepul huquqiy maslahat olishga yordam beradi. \n\nChet elda o’qish bo’yicha tavsiyalar ham so’rashingiz mumkin.
             """
-            await message.answer(text)
-
-            text = f"""
-            ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
             await message.answer(text, reply_markup=menu)
+
             try:
                 args = await db.select_user(telegram_id=message.from_user.id)
                 args_user = await db.select_user(telegram_id=int(args[7]))
@@ -111,11 +108,11 @@ async def show_channels(message: types.Message, state: FSMContext):
             text = """
             Assalom aleykum, bu bot sizga Amerikada istiqomat qilib, yuridik faoliyat olib boruvchi malakali yuristlar jamoasidan bepul huquqiy maslahat olishga yordam beradi. \n\nChet elda o’qish bo’yicha tavsiyalar ham so’rashingiz mumkin.
             """
-            await message.answer(text)
-
-            text = f"""
-            ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
             await message.answer(text, reply_markup=menu)
+
+            # text = f"""
+            # ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
+            # await message.answer(text, reply_markup=menu)
         else:
             button = types.InlineKeyboardMarkup(row_width=1, )
             counter = 0
@@ -160,10 +157,10 @@ async def show_channels(message: types.Message, state: FSMContext):
             text = """
             Assalom aleykum, bu bot sizga Amerikada istiqomat qilib, yuridik faoliyat olib boruvchi malakali yuristlar jamoasidan bepul huquqiy maslahat olishga yordam beradi. \n\nChet elda o’qish bo’yicha tavsiyalar ham so’rashingiz mumkin.
             """
-            await message.answer(text)
-            text = f"""
-            ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
             await message.answer(text, reply_markup=menu)
+            # text = f"""
+            # ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
+            # await message.answer(text, reply_markup=menu)
         else:
             button = types.InlineKeyboardMarkup(row_width=1, )
             counter = 0
@@ -208,9 +205,9 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
         status *= await subscription.check(user_id=call.from_user.id,
                                            channel=f'{channel}')
     if status:
-        text = f"""
-        ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
-        await call.message.answer(text, reply_markup=menu)
+        # text = f"""
+        # ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
+        # await call.message.answer(text, reply_markup=menu)
 
         try:
             if_old = await db.select_user(telegram_id=call.from_user.id)
@@ -292,6 +289,9 @@ async def admin_profile(message: types.Message):
         else:
             url_link = f'https://t.me/huquqshunos_uz_bot?start={message.from_user.id}'
             lessons = await db.select_related_lessons(button_name="Asosiy qism")
+            text = f"""
+            ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif posti orqali taklif qilishni boshlang 👇</b>"""
+            await message.answer(text)
 
             if lessons:
                 for i in lessons:

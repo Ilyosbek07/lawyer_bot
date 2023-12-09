@@ -40,10 +40,10 @@ async def contumum(msg: types.Message, state: FSMContext):
                     await msg.send_copy(chat_id=user_id)
                     count += 1
                     await asyncio.sleep(0.05)
-
                 except Exception as err:
                     count_err += 1
                     await asyncio.sleep(0.05)
+                    continue
 
             await msg.answer(f"Ҳабар юборилганлар: <b>{count}</b> та."
                              f"\n\nЮборилмаганлар: <b>{count_err}</b> та."

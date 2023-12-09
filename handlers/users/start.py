@@ -399,7 +399,7 @@ async def json_reader(message: types.Message):
                 username=user['username'],
                 full_name=user['full_name'],
                 phone='---',
-                score='---'
+                score=0
             )
         except Exception as e:
             print(e)

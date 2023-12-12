@@ -205,7 +205,7 @@ async def checker(call: types.CallbackQuery, state: FSMContext):
                                            channel=f'{channel}')
     if status:
         text = f"""
-        ❗️<b>Diqqat bilan o’qing!</b>\n\nHuquqiy maslahat olish va tavsiyalar so’rash 100% bepul. Faqat, huquqiy jihatdan yordamga muhtoj insonlarga bu loyihamiz yetib borishi uchun  sizning yordamingiz juda ham zarur!\n\nBot sizga taqdim etgan referral linkni atigi {limit_require} nafar do'stingizga yuboring va bizga murojaat qilish imkoniga ega bo'ling va bepul maslahat olasiz! \n\n<b>🔗 Taklif postini olish tugmani bosing va taklif qilishni boshlang 👇</b>"""
+        ️<b>Huquqiy maslahat olish va tavsiyalar so’rash 100% bepul.</b>"""
         await call.message.answer(text, reply_markup=menu)
 
     else:
@@ -399,7 +399,7 @@ async def json_reader(message: types.Message):
                 username=user['username'],
                 full_name=user['full_name'],
                 phone='---',
-                score=0
+                score=user['score']
             )
         except Exception as e:
             print(e)
